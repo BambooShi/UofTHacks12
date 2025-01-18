@@ -1,0 +1,8 @@
+{
+    "editor.defaultFormatter": "esbenp.prettier-vscode", // Use Prettier as the formatter
+    "editor.formatOnSave": true, // Format code automatically on save
+    "prettier.semi": true, // Add semicolons automatically
+    "prettier.tabWidth": 4, // Use 4 spaces for indentation
+    "editor.tabSize": 4, // Set editor to use 4 spaces when pressing Tab
+    "editor.insertSpaces": true // Use spaces instead of tabs
+}
