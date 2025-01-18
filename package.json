@@ -12,7 +12,7 @@
         "start": "node ./dist/app.js",
         "tsc": "tsc",
         "postinstall": "npm run tsc",
-        "dev": "ts-node-dev --respawn --pretty --transpile-only app.ts"
+        "dev": "nodemon --watch src --ext ts --exec ts-node src/app.ts"
     },
     "keywords": [],
     "author": "",
@@ -29,6 +29,7 @@
         "@types/jest": "^29.5.14",
         "@types/node": "^22.10.7",
         "@typescript-eslint/parser": "^8.20.0",
+        "nodemon": "^3.1.9",
         "ts-node": "^10.9.2",
         "ts-node-dev": "^2.0.0",
         "typescript": "^5.7.3"

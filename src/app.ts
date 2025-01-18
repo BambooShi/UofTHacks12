@@ -16,5 +16,5 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Wardrobe-Log - listening on port ${PORT}!`);
+    console.log(`Hack U of T - listening on port ${PORT}!`);
 });
