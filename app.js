@@ -86,12 +86,40 @@ function onResults(results) {
             console.log("squat");
             sendMotionData({ player2: "squat", player1: "jump" }); //temporary hardcoded
         }
+        // Only overwrite missing pixels.
+        canvasCtx.globalCompositeOperation = 'destination-atop';
+        canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+        canvasCtx.globalCompositeOperation = 'source-over';
     }
+    else {
+        canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+    }
+    if (results.poseLandmarks) {
+        drawingUtils.drawConnectors(canvasCtx, results.poseLandmarks, mpPose.POSE_CONNECTIONS, { visibilityMin: 0.65, color: 'white' });
+        drawingUtils.drawLandmarks(canvasCtx, Object.values(mpPose.POSE_LANDMARKS_LEFT)
+            .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'rgb(255,138,0)' });
+        drawingUtils.drawLandmarks(canvasCtx, Object.values(mpPose.POSE_LANDMARKS_RIGHT)
+            .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'rgb(0,217,231)' });
+        drawingUtils.drawLandmarks(canvasCtx, Object.values(mpPose.POSE_LANDMARKS_NEUTRAL)
+            .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'white' });
+    }
+    canvasCtx.restore();
+    
 
-    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+    
+
+    // canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
 }
-const pose = new mpPose.Pose(options);
+const pose = new mpPose.Pose({
+    locateFile: options.locateFile,
+    modelComplexity: 1,  
+    smoothLandmarks: true,  
+    enableSegmentation: false,  
+    minDetectionConfidence: 0.5,
+    minTrackingConfidence: 0.5,
+    numPoses: 2 // Detect up to 2 people
+});
 pose.onResults(onResults);
 
 // Present a control panel through which the user can manipulate the solution
