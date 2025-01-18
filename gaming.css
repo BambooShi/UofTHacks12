@@ -30,6 +30,7 @@
 
   .container {
     background: url('country_scene.jpg') 0 0 / 100% 68%;
+    aspect-ratio: 4/3;
     background-repeat: no-repeat;
     vertical-align: middle;
   }

@@ -76,15 +76,15 @@ function onResults(results) {
             // triggerAnimation("squat");
             console.log("squatting");
             sendMotionData({ action: "squat", player: "player1" }); //temporary hardcoded
+        
+        }  else if (isLeftHandUp){
+            // triggerAnimation("jump");
+            console.log("idle");
+            sendMotionData({ action: "jump", player: "player1" }); //temporary hardcoded
+        } else if (isRightHandUp){
+            console.log("squat");
+            sendMotionData({ action: "squat", player: "player2" }); //temporary hardcoded
         }
-        // }  else if (isLeftHandUp){
-        //     // triggerAnimation("jump");
-        //     console.log("idle");
-        //     sendMotionData({ action: "jump", player: "player1" }); //temporary hardcoded
-        // } else if (isRightHandUp){
-        //     console.log("squat");
-        //     sendMotionData({ action: "squat", player: "player2" }); //temporary hardcoded
-        // }
     }
 
     canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);

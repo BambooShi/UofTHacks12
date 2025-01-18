@@ -36,8 +36,12 @@ const options = {
 // Our input frames will come from here.
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
+
 const spriteSheet = new Image();
-spriteSheet.src = 'spritesheet.png';
+spriteSheet.src = 'player1.png';
+
+const spriteSheet2 = new Image();
+spriteSheet2.src = 'player2.png';
 
 setInterval(() => {
     const motionData = JSON.parse(localStorage.getItem('motionData'));
@@ -65,23 +69,43 @@ function animateSprite(timestamp, canvas, ctx, motionData) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw the current frame
-    const sx = currentFrame * 80; // Calculate source x position
+    const sx = currentFrame * 70; // Calculate source x position
     
-    if (motionData.action == "jump"){
-        // triggerAnimation("attack");
-        // character.classList.add("attack");
-        canvasCtx.drawImage(spriteSheet, 250+sx, 50, 80, 150, 100, 300, 50, 80);
-        console.log("jumping");
-    } else if (motionData.action == "squat"){
-        // triggerAnimation("dodge");
-        // character.classList.add("dodge");
-        canvasCtx.drawImage(spriteSheet, sx, 370, 80, 150, 100, 300, 50, 80);
-        console.log("squatting");
-    }  else {
-        // triggerAnimation("idle");
-        canvasCtx.drawImage(spriteSheet, sx, 210, 80, 150, 100, 300, 50, 80);
-        console.log("idle");
+    if (motionData.player == "player1"){
+        if (motionData.action == "jump"){
+            // triggerAnimation("attack");
+            // character.classList.add("attack");
+            canvasCtx.drawImage(spriteSheet, 245 + 2.5*sx, 185, 80, 100, 600, 370, 150, 200);
+            console.log("jumping");
+        } else if (motionData.action == "squat"){
+            // triggerAnimation("dodge");
+            // character.classList.add("dodge");
+            canvasCtx.drawImage(spriteSheet, 245 + sx, 185, 80, 100, 600, 370, 150, 200);
+            console.log("squatting");
+        }  else {
+            // triggerAnimation("idle");
+            canvasCtx.drawImage(spriteSheet, 245, 185, 80, 100, 600, 370, 150, 200);
+            console.log("idle");
+        }
+    } 
+    if (motionData.player == "player2"){
+        if (motionData.action == "jump"){
+            // triggerAnimation("attack");
+            // character.classList.add("attack");
+            canvasCtx.drawImage(spriteSheet2, 230 - 2.5*sx, 185, 80, 100, 700, 275, 150, 200);
+            console.log("jumping");
+        } else if (motionData.action == "squat"){
+            // triggerAnimation("dodge");
+            // character.classList.add("dodge");
+            canvasCtx.drawImage(spriteSheet2, 235 - sx, 185, 80, 100, 700, 275, 150, 200);
+            console.log("squatting");
+        }  else {
+            // triggerAnimation("idle");
+            canvasCtx.drawImage(spriteSheet2, 240, 185, 80, 100, 700, 275, 150, 200);
+            console.log("idle");
+        }
     }
+    
 
     // Request the next frame
     requestAnimationFrame(animateSprite);
@@ -91,27 +115,3 @@ function animateSprite(timestamp, canvas, ctx, motionData) {
 spriteSheet.onload = () => {
     requestAnimationFrame(animateSprite);
 };
-
-function drawItem(motionData){
-    // const character = document.getElementById("character");
-
-    // character.classList.remove("attack", "dodge");
-
-    const animationSpeed = 100; //ms
-
-    if (motionData.action == "jump"){
-        // triggerAnimation("attack");
-        // character.classList.add("attack");
-        canvasCtx.drawImage(spriteSheet, 0, 100, 150, 300, 100, 250, 100, 150);
-        console.log("jumping");
-    } else if (motionData.action == "squat"){
-        // triggerAnimation("dodge");
-        // character.classList.add("dodge");
-        canvasCtx.drawImage(spriteSheet, 0, 100, 100, 100, 250, 150, 100, 100);
-        console.log("squatting");
-    }  else {
-        // triggerAnimation("idle");
-        canvasCtx.drawImage(spriteSheet, 0, 200, 100, 100, 150, 250, 100, 100);
-        console.log("idle");
-    }
-}
