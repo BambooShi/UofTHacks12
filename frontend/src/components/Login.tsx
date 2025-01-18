@@ -3,14 +3,16 @@ import { NavigateFunction, useNavigate } from "react-router";
 
 const Login: React.FC = () => {
     const navigate: NavigateFunction = useNavigate();
-    const getGamePage = (event: React.FormEvent<HTMLInputElement>) => {
+    const getGamePage = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formElement: HTMLFormElement = event.currentTarget;
         const formData = new FormData(formElement);
-        const path: string = "./play";
+        const path: string = "/play";
         const player1Name = formData.get("player1") as string;
         const player2Name = formData.get("player2") as string;
-        navigate(path, { state: { player1Name, player2Name } });
+        navigate(path, {
+            state: { player1Name: player1Name, player2Name: player2Name },
+        });
     };
 
     return (
