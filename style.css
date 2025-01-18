@@ -132,10 +132,9 @@
   }
 
   #character {
-    position: absolute;
     width: 100px;
     height: 100px;
-    background: url('spritesheet.png') 0 0 / 400% 400%;
+    background: url('spritesheet.png') 0 0 / 500% 300%;
     animation: idle is steps(5) infinite;
   }
 
