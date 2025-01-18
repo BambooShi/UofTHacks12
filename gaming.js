@@ -71,39 +71,36 @@ function animateSprite(timestamp, canvas, ctx, motionData) {
     // Draw the current frame
     const sx = currentFrame * 70; // Calculate source x position
     
-    if (motionData.player == "player1"){
-        if (motionData.action == "jump"){
-            // triggerAnimation("attack");
-            // character.classList.add("attack");
-            canvasCtx.drawImage(spriteSheet, 245 + 2.5*sx, 185, 80, 100, 600, 370, 150, 200);
-            console.log("jumping");
-        } else if (motionData.action == "squat"){
-            // triggerAnimation("dodge");
-            // character.classList.add("dodge");
-            canvasCtx.drawImage(spriteSheet, 245 + sx, 185, 80, 100, 600, 370, 150, 200);
-            console.log("squatting");
-        }  else {
-            // triggerAnimation("idle");
-            canvasCtx.drawImage(spriteSheet, 245, 185, 80, 100, 600, 370, 150, 200);
-            console.log("idle");
-        }
-    } 
-    if (motionData.player == "player2"){
-        if (motionData.action == "jump"){
-            // triggerAnimation("attack");
-            // character.classList.add("attack");
-            canvasCtx.drawImage(spriteSheet2, 230 - 2.5*sx, 185, 80, 100, 700, 275, 150, 200);
-            console.log("jumping");
-        } else if (motionData.action == "squat"){
-            // triggerAnimation("dodge");
-            // character.classList.add("dodge");
-            canvasCtx.drawImage(spriteSheet2, 235 - sx, 185, 80, 100, 700, 275, 150, 200);
-            console.log("squatting");
-        }  else {
-            // triggerAnimation("idle");
-            canvasCtx.drawImage(spriteSheet2, 240, 185, 80, 100, 700, 275, 150, 200);
-            console.log("idle");
-        }
+    if (motionData.player1 == "jump"){
+        // triggerAnimation("attack");
+        // character.classList.add("attack");
+        canvasCtx.drawImage(spriteSheet, 245 + 2.5*sx, 185, 80, 100, 600, 370, 150, 200);
+        console.log("jumping");
+    } else if (motionData.player1 == "squat"){
+        // triggerAnimation("dodge");
+        // character.classList.add("dodge");
+        canvasCtx.drawImage(spriteSheet, 245 + sx, 185, 80, 100, 600, 370, 150, 200);
+        console.log("squatting");
+    }  else {
+        // triggerAnimation("idle");
+        canvasCtx.drawImage(spriteSheet, 245, 185, 80, 100, 600, 370, 150, 200);
+        console.log("idle");
+    }
+    
+    if (motionData.player2 == "jump"){
+        // triggerAnimation("attack");
+        // character.classList.add("attack");
+        canvasCtx.drawImage(spriteSheet2, 230 - 2.5*sx, 185, 80, 100, 750, 370, 150, 200);
+        console.log("jumping");
+    } else if (motionData.player2 == "squat"){
+        // triggerAnimation("dodge");
+        // character.classList.add("dodge");
+        canvasCtx.drawImage(spriteSheet2, 235 - sx, 185, 80, 100, 750, 370, 150, 200);
+        console.log("squatting");
+    }  else {
+        // triggerAnimation("idle");
+        canvasCtx.drawImage(spriteSheet2, 240, 185, 80, 100, 750, 370, 150, 200);
+        console.log("idle");
     }
     
 
