@@ -1,8 +1,12 @@
-const { startCamera } = require('./camera/capture');
-const { detectPose } = require('./tracking/poseEstimation');
+import { startCamera } from './camera/capture.js';
+import { setupPoseDetection } from './tracking/poseEstimation.js';
 
-// Main function to run the program
 (async function main() {
     console.log("Starting Human Movement Tracker...");
-    await startCamera(detectPose);
+
+    // Initialize MediaPipe Pose Detector
+    const poseDetector = setupPoseDetection();
+
+    // Start the camera feed and pass frames to pose detection
+    await startCamera(poseDetector.onResults);
 })();
