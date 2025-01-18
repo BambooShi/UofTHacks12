@@ -3,7 +3,6 @@ import DeviceDetector from "https://cdn.skypack.dev/device-detector-js@2.2.10";
 // Client and os are regular expressions.
 // See: https://cdn.jsdelivr.net/npm/device-detector-js@2.2.10/README.md for
 // legal values for client and os
-
 testSupport([
     { client: 'Chrome' },
 ]);
@@ -40,15 +39,6 @@ const options = {
         return `https://cdn.jsdelivr.net/npm/@mediapipe/pose@${mpPose.VERSION}/${file}`;
     }
 };
-
-options.setOptions({
-    modelComplexity: 1,
-    smoothLandmarks: true,
-    enableSegmentation: false,
-    smoothSegmentation: true,
-    minDetectionConfidence: 0.5,
-    minTrackingConfidence: 0.5
-})
 // Our input frames will come from here.
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
@@ -101,26 +91,7 @@ function onResults(results) {
     canvasCtx.restore();
 }
 const pose = new mpPose.Pose(options);
-pose.onResults((results) => {
-    const landmarks = results.poseLandmarks;
-
-    if (landmarks){
-        const leftHipY = landmarks[23].y;
-        const rightHipY = landmarks[24].y;
-        const leftKneeY = landmarks[25].y;
-        const rightKneeY = landmarks[26].y;
-
-        const isJumping = leftHipY < 0.4 && rightHipY < 0.4;
-        const isSquatting = leftKneeY - leftHipY < 0.1 && rightKneeY - rightHipY < 0.1;
-
-        if (isJumping){
-            triggerAnimation("jump");
-        } else if (isSquatting){
-            triggerAnimation("squat");
-        }   
-    }
-});
-
+pose.onResults(onResults);
 // Present a control panel through which the user can manipulate the solution
 // options.
 new controls
@@ -165,14 +136,3 @@ new controls
     activeEffect = x['effect'];
     pose.setOptions(options);
 });
-
-function triggerAnimation(action){
-    const character = document.getElementById("character");
-
-    character.classList.remove("jump", "squat");
-    if (action == "jump"){
-        character.classList.add("jump");
-    } else if (action == "squat"){
-        character.classList.add("squat");
-    }
-}
