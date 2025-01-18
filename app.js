@@ -80,10 +80,10 @@ function onResults(results) {
         } 
          if (isLeftHandUp){
             // triggerAnimation("jump");
-            console.log("idle");
+            console.log("squat");
             sendMotionData({ player2: "", player1: "squat" }); //temporary hardcoded
         }  if (isRightHandUp){
-            console.log("squat");
+            console.log("jump");
             sendMotionData({ player2: "", player1: "jump" }); //temporary hardcoded
         }
         // Only overwrite missing pixels.

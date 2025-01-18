@@ -53,12 +53,15 @@ spriteSheet2.src = 'player2.png';
 
 
 let currentFrame = 0;    // Current frame index
-const animationSpeed = 500; // Milliseconds between frame changes
+const animationSpeed = 1000; // Milliseconds between frame changes
 let lastFrameTime = 0;
 
 let lastBotAction = "idle";
 let botActionTimestamp = 0;
 let botReactionDelay = 1000;
+
+let player1 = { x: 450, y: 370, width: 150, height: 200 };
+let bot = { x: 600, y: 370, width: 150, height: 200 };
 
 function gameLoop(timestamp) {
     // Update Player 1 motion data
@@ -84,6 +87,11 @@ function gameLoop(timestamp) {
     drawPlayer1(motionData.player1);
     drawBot(lastBotAction);
 
+    if (motionData.player1 == "jump" && isColliding(bot, player1) && lastBotAction != "squat") {
+        console.log("Player 1 wins!");
+    } else if (lastBotAction == "jump" && isColliding(bot, player1) && motionData.player1 != "squat") {
+        console.log("Bot wins!");
+    }
     // Continue the loop
     requestAnimationFrame(gameLoop);
 }
@@ -96,15 +104,18 @@ function drawPlayer1(motionData){
         // triggerAnimation("attack");
         // character.classList.add("attack");
         canvasCtx.drawImage(spriteSheet, 245 + 2.5*sx, 185, 80, 100, 500, 370, 150, 200);
+        player1.x = 500;
         console.log("jumping");
     } else if (motionData == "squat"){
         // triggerAnimation("dodge");
         // character.classList.add("dodge");
-        canvasCtx.drawImage(spriteSheet, 245 + sx, 185, 80, 100, 500, 370, 150, 200);
+        canvasCtx.drawImage(spriteSheet, 245 + sx, 185, 80, 100, 450, 370, 150, 200);
+        player1.x = 450;
         console.log("squatting");
     }  else {
         // triggerAnimation("idle");
-        canvasCtx.drawImage(spriteSheet, 245, 185, 80, 100, 500, 370, 150, 200);
+        canvasCtx.drawImage(spriteSheet, 245, 185, 80, 100, 450, 370, 150, 200);
+        player1.x = 450;
         console.log("idle");
     }
 }
@@ -116,16 +127,19 @@ function drawBot(lastBotAction){
     if (lastBotAction == "jump"){
         // triggerAnimation("attack");
         // character.classList.add("attack");
-        canvasCtx.drawImage(spriteSheet2, 240 - 2.5*sx, 185, 80, 100, 600, 370, 150, 200);
+        canvasCtx.drawImage(spriteSheet2, 240 - 2.5*sx, 185, 80, 100, 550, 370, 150, 200);
+        bot.x = 550;
         console.log("jumping");
     } else if (lastBotAction == "squat"){
         // triggerAnimation("dodge");
         // character.classList.add("dodge");
         canvasCtx.drawImage(spriteSheet2, 245 - sx, 185, 80, 100, 600, 370, 150, 200);
+        bot.x = 600;
         console.log("squatting");
     }  else {
         // triggerAnimation("idle");
         canvasCtx.drawImage(spriteSheet2, 235, 185, 80, 100, 600, 370, 150, 200);
+        bot.x = 600;
         console.log("idle");
     }
 }
@@ -139,6 +153,15 @@ function getRandomBotAction(){
     } else {
         return "idle";
     }
+}
+
+function isColliding(rect1, rect2) {
+    return (
+        rect1.x < rect2.x + rect2.width &&
+        rect1.x + rect1.width > rect2.x &&
+        rect1.y < rect2.y + rect2.height &&
+        rect1.y + rect1.height > rect2.y
+    );
 }
 
 // Start the loop
