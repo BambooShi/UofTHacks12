@@ -34,8 +34,8 @@ const options = {
     }
 };
 // Our input frames will come from here.
-const canvasElement = document.getElementsByClassName('output_canvas')[0];
-const canvasCtx = canvasElement.getContext('2d');
+const canvas = document.getElementsByClassName('output_canvas')[0];
+const canvasCtx = canvas.getContext('2d');
 
 const spriteSheet = new Image();
 spriteSheet.src = 'player1.png';
@@ -43,72 +43,105 @@ spriteSheet.src = 'player1.png';
 const spriteSheet2 = new Image();
 spriteSheet2.src = 'player2.png';
 
-setInterval(() => {
-    const motionData = JSON.parse(localStorage.getItem('motionData'));
-    if (motionData) {
-        // drawItem(motionData);
-        animateSprite(0, canvasElement, canvasCtx, motionData);
-    }
-}, 100)
+// setInterval(() => {
+//     const motionData = JSON.parse(localStorage.getItem('motionData'));
+//     if (motionData) {
+//         // drawItem(motionData);
+//         gameLoop(timestamp, motionData);
+//     }
+// }, 100)
 
 
 let currentFrame = 0;    // Current frame index
-
 const animationSpeed = 500; // Milliseconds between frame changes
 let lastFrameTime = 0;
 
-// Function to animate sprite
-function animateSprite(timestamp, canvas, ctx, motionData) {
-    if (timestamp - lastFrameTime >= animationSpeed) {
-        // Update to the next frame
-        currentFrame = (currentFrame + 1) % 2; // Loop through frames
-        lastFrameTime = timestamp;
+let lastBotAction = "idle";
+let botActionTimestamp = 0;
+let botReactionDelay = 1000;
+
+function gameLoop(timestamp) {
+    // Update Player 1 motion data
+    const motionData = JSON.parse(localStorage.getItem('motionData')) || { player1: "idle" };
+    // const playerAction = motionData.player1;
+
+    if (timestamp - lastFrameTime > animationSpeed) {
+        currentFrame = (currentFrame + 1) % 2; // Update the current frame index
+        lastFrameTime = timestamp; // Update the last frame time
+    }
+
+    // Update Bot action with delay
+    if (timestamp - botActionTimestamp > botReactionDelay) {
+        lastBotAction = getRandomBotAction();
+        botActionTimestamp = timestamp;
+        botReactionDelay = Math.random() * 2500 + 500; // Re-randomize reaction delay
     }
 
     // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw the current frame
-    const sx = currentFrame * 70; // Calculate source x position
-    
-    if (motionData.player1 == "jump"){
-        // triggerAnimation("attack");
-        // character.classList.add("attack");
-        canvasCtx.drawImage(spriteSheet, 245 + 2.5*sx, 185, 80, 100, 600, 370, 150, 200);
-        console.log("jumping");
-    } else if (motionData.player1 == "squat"){
-        // triggerAnimation("dodge");
-        // character.classList.add("dodge");
-        canvasCtx.drawImage(spriteSheet, 245 + sx, 185, 80, 100, 600, 370, 150, 200);
-        console.log("squatting");
-    }  else {
-        // triggerAnimation("idle");
-        canvasCtx.drawImage(spriteSheet, 245, 185, 80, 100, 600, 370, 150, 200);
-        console.log("idle");
-    }
-    
-    if (motionData.player2 == "jump"){
-        // triggerAnimation("attack");
-        // character.classList.add("attack");
-        canvasCtx.drawImage(spriteSheet2, 230 - 2.5*sx, 185, 80, 100, 750, 370, 150, 200);
-        console.log("jumping");
-    } else if (motionData.player2 == "squat"){
-        // triggerAnimation("dodge");
-        // character.classList.add("dodge");
-        canvasCtx.drawImage(spriteSheet2, 235 - sx, 185, 80, 100, 750, 370, 150, 200);
-        console.log("squatting");
-    }  else {
-        // triggerAnimation("idle");
-        canvasCtx.drawImage(spriteSheet2, 240, 185, 80, 100, 750, 370, 150, 200);
-        console.log("idle");
-    }
-    
+    // Draw Player 1 and Bot
+    drawPlayer1(motionData.player1);
+    drawBot(lastBotAction);
 
-    // Request the next frame
-    requestAnimationFrame(animateSprite);
+    // Continue the loop
+    requestAnimationFrame(gameLoop);
 }
 
-// Start the animation when the sprite sheet loads
-spriteSheet.onload = () => {
-    requestAnimationFrame(animateSprite);
+function drawPlayer1(motionData){
+    // Draw the current frame
+    const sx = currentFrame * 70; // Calculate source x position
+        
+    if (motionData == "jump"){
+        // triggerAnimation("attack");
+        // character.classList.add("attack");
+        canvasCtx.drawImage(spriteSheet, 245 + 2.5*sx, 185, 80, 100, 500, 370, 150, 200);
+        console.log("jumping");
+    } else if (motionData == "squat"){
+        // triggerAnimation("dodge");
+        // character.classList.add("dodge");
+        canvasCtx.drawImage(spriteSheet, 245 + sx, 185, 80, 100, 500, 370, 150, 200);
+        console.log("squatting");
+    }  else {
+        // triggerAnimation("idle");
+        canvasCtx.drawImage(spriteSheet, 245, 185, 80, 100, 500, 370, 150, 200);
+        console.log("idle");
+    }
+}
+
+function drawBot(lastBotAction){
+    // Draw the current frame
+    const sx = currentFrame * 70; // Calculate source x position
+        
+    if (lastBotAction == "jump"){
+        // triggerAnimation("attack");
+        // character.classList.add("attack");
+        canvasCtx.drawImage(spriteSheet2, 240 - 2.5*sx, 185, 80, 100, 600, 370, 150, 200);
+        console.log("jumping");
+    } else if (lastBotAction == "squat"){
+        // triggerAnimation("dodge");
+        // character.classList.add("dodge");
+        canvasCtx.drawImage(spriteSheet2, 245 - sx, 185, 80, 100, 600, 370, 150, 200);
+        console.log("squatting");
+    }  else {
+        // triggerAnimation("idle");
+        canvasCtx.drawImage(spriteSheet2, 235, 185, 80, 100, 600, 370, 150, 200);
+        console.log("idle");
+    }
+}
+
+function getRandomBotAction(){
+    const random = Math.random();
+    if (random < 0.33) {
+        return "jump";
+    } else if (random < 0.66) {
+        return "squat";
+    } else {
+        return "idle";
+    }
+}
+
+// Start the loop
+spriteSheet.onload = spriteSheet2.onload = () => {
+    requestAnimationFrame(gameLoop);
 };

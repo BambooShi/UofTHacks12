@@ -61,18 +61,18 @@ function onResults(results) {
         const leftHandY = landmarks[21].y;
         const rightHandY = landmarks[22].y;
 
-        const isJumping1 = leftHipY < 0.4 && rightHipY < 0.4;
-        const isSquatting1 = leftKneeY - leftHipY < 0.1 && rightKneeY - rightHipY < 0.1;
+        const isJumping = leftHipY < 0.4 && rightHipY < 0.4;
+        const isSquatting = leftKneeY - leftHipY < 0.1 && rightKneeY - rightHipY < 0.1;
         const isLeftHandUp = leftHandY < 0.5;
         const isRightHandUp = rightHandY < 0.5;
 
 
-        if (isJumping1){
+        if (isJumping){
             // triggerAnimation("jump");
             console.log("jumping");
             sendMotionData({ player2: "", player1: "jump" }); //temporary hardcoded
             
-        } else if (isSquatting1){
+        } else if (isSquatting){
             // triggerAnimation("squat");
             console.log("squatting");
             sendMotionData({ player2: "", player1: "squat" }); //temporary hardcoded
@@ -81,10 +81,10 @@ function onResults(results) {
          if (isLeftHandUp){
             // triggerAnimation("jump");
             console.log("idle");
-            sendMotionData({ player2: "jump", player1: "squat" }); //temporary hardcoded
+            sendMotionData({ player2: "", player1: "squat" }); //temporary hardcoded
         }  if (isRightHandUp){
             console.log("squat");
-            sendMotionData({ player2: "squat", player1: "jump" }); //temporary hardcoded
+            sendMotionData({ player2: "", player1: "jump" }); //temporary hardcoded
         }
     }
 
