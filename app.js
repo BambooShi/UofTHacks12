@@ -26,10 +26,6 @@ function testSupport(supportedDevices) {
         isSupported = true;
         break;
     }
-    if (!isSupported) {
-        alert(`This demo, running on ${detectedDevice.client.name}/${detectedDevice.os.name}, ` +
-            `is not well supported at this time, expect some flakiness while we improve our code.`);
-    }
 }
 const controls = window;
 const drawingUtils = window;
@@ -50,53 +46,45 @@ const spinner = document.querySelector('.loading');
 spinner.ontransitionend = () => {
     spinner.style.display = 'none';
 };
-let activeEffect = 'mask';
 function onResults(results) {
     // Hide the spinner.
     document.body.classList.add('loaded');
-    // Draw the overlays.
-    canvasCtx.save();
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    if (results.segmentationMask) {
-        canvasCtx.drawImage(results.segmentationMask, 0, 0, canvasElement.width, canvasElement.height);
-        // Only overwrite existing pixels.
-        if (activeEffect === 'mask' || activeEffect === 'both') {
-            canvasCtx.globalCompositeOperation = 'source-in';
-            // This can be a color or a texture or whatever...
-            canvasCtx.fillStyle = '#00FF007F';
-            canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+
+    const landmarks = results.poseLandmarks;
+
+    if (landmarks){
+        const leftHipY = landmarks[23].y;
+        const rightHipY = landmarks[24].y;
+        const leftKneeY = landmarks[25].y;
+        const rightKneeY = landmarks[26].y;
+        const rightHandY = landmarks[21].y;
+
+        const isJumping = leftHipY < 0.4 && rightHipY < 0.4;
+        const isSquatting = leftKneeY - leftHipY < 0.1 && rightKneeY - rightHipY < 0.1;
+        const isRightHandUp = rightHandY > 0.5;
+
+        if (isJumping){
+            triggerAnimation("jump");
+            console.log("jumping");
+        } else if (isSquatting){
+            triggerAnimation("squat");
+            console.log("squatting");
+        }  else if (isRightHandUp){
+            triggerAnimation("idle");
+            console.log("idle");
         }
-        else {
-            canvasCtx.globalCompositeOperation = 'source-out';
-            canvasCtx.fillStyle = '#0000FF7F';
-            canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
-        }
-        // Only overwrite missing pixels.
-        canvasCtx.globalCompositeOperation = 'destination-atop';
-        canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
-        canvasCtx.globalCompositeOperation = 'source-over';
     }
-    else {
-        canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
-    }
-    if (results.poseLandmarks) {
-        drawingUtils.drawConnectors(canvasCtx, results.poseLandmarks, mpPose.POSE_CONNECTIONS, { visibilityMin: 0.65, color: 'white' });
-        drawingUtils.drawLandmarks(canvasCtx, Object.values(mpPose.POSE_LANDMARKS_LEFT)
-            .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'rgb(255,138,0)' });
-        drawingUtils.drawLandmarks(canvasCtx, Object.values(mpPose.POSE_LANDMARKS_RIGHT)
-            .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'rgb(0,217,231)' });
-        drawingUtils.drawLandmarks(canvasCtx, Object.values(mpPose.POSE_LANDMARKS_NEUTRAL)
-            .map(index => results.poseLandmarks[index]), { visibilityMin: 0.65, color: 'white', fillColor: 'white' });
-    }
-    canvasCtx.restore();
+
+    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
 }
 const pose = new mpPose.Pose(options);
 pose.onResults(onResults);
+
 // Present a control panel through which the user can manipulate the solution
 // options.
 new controls
     .ControlPanel(controlsElement, {
-    selfieMode: true,
     modelComplexity: 1,
     smoothLandmarks: true,
     enableSegmentation: false,
@@ -132,7 +120,18 @@ new controls
 ])
     .on(x => {
     const options = x;
-    videoElement.classList.toggle('selfie', options.selfieMode);
-    activeEffect = x['effect'];
     pose.setOptions(options);
 });
+
+function triggerAnimation(action){
+    const character = document.getElementById("character");
+
+    character.classList.remove("jump", "squat");
+    if (action == "jump"){
+        character.classList.add("jump");
+    } else if (action == "squat"){
+        character.classList.add("squat");
+    } else if (action == "idle"){
+        character.classList.remove("jump", "squat");
+    }
+}
