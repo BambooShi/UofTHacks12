@@ -1,4 +1,5 @@
 import DeviceDetector from "https://cdn.skypack.dev/device-detector-js@2.2.10";
+// import { triggerAnimation } from "./gaming.js";
 // Usage: testSupport({client?: string, os?: string}[])
 // Client and os are regular expressions.
 // See: https://cdn.jsdelivr.net/npm/device-detector-js@2.2.10/README.md for
@@ -57,21 +58,29 @@ function onResults(results) {
         const rightHipY = landmarks[24].y;
         const leftKneeY = landmarks[25].y;
         const rightKneeY = landmarks[26].y;
-        const rightHandY = landmarks[21].y;
+        const leftHandY = landmarks[21].y;
+        const rightHandY = landmarks[22].y;
 
         const isJumping = leftHipY < 0.4 && rightHipY < 0.4;
-        const isSquatting = leftKneeY - leftHipY < 0.1 && rightKneeY - rightHipY < 0.1;
-        const isRightHandUp = rightHandY > 0.5;
+        const isSquatting = leftKneeY - leftHipY < 0.2 && rightKneeY - rightHipY < 0.2;
+        const isLeftHandUp = leftHandY < 0.5;
+        const isRightHandUp = rightHandY < 0.5;
+
 
         if (isJumping){
-            triggerAnimation("jump");
+            // triggerAnimation("jump");
             console.log("jumping");
+            
         } else if (isSquatting){
-            triggerAnimation("squat");
+            // triggerAnimation("squat");
             console.log("squatting");
-        }  else if (isRightHandUp){
-            triggerAnimation("idle");
+        }  else if (isLeftHandUp){
+            // triggerAnimation("jump");
             console.log("idle");
+            sendMotionData({ action: "jump", player: "player1" }); //temporary hardcoded
+        } else if (isRightHandUp){
+            console.log("squat");
+            sendMotionData({ action: "squat", player: "player2" }); //temporary hardcoded
         }
     }
 
@@ -94,13 +103,8 @@ new controls
     effect: 'background',
 })
     .add([
-    new controls.StaticText({ title: 'MediaPipe Pose' }),
     new controls.SourcePicker({
-        onSourceChanged: () => {
-            // Resets because this model gives better results when reset between
-            // source changes.
-            pose.reset();
-        },
+        
         onFrame: async (input, size) => {
             const aspect = size.height / size.width;
             let width, height;
@@ -123,15 +127,6 @@ new controls
     pose.setOptions(options);
 });
 
-function triggerAnimation(action){
-    const character = document.getElementById("character");
-
-    character.classList.remove("jump", "squat");
-    if (action == "jump"){
-        character.classList.add("jump");
-    } else if (action == "squat"){
-        character.classList.add("squat");
-    } else if (action == "idle"){
-        character.classList.remove("jump", "squat");
-    }
+function sendMotionData(data){
+    localStorage.setItem("motionData", JSON.stringify(data));
 }

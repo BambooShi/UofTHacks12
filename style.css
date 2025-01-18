@@ -131,27 +131,3 @@
     position: absolute;
   }
 
-  #character {
-    width: 100px;
-    height: 100px;
-    background: url('spritesheet.png') 0 0 / 500% 300%;
-    animation: idle 1s steps(5) infinite;
-  }
-
-  .jump {
-    animation: jump 0.5s steps(5) 1;
-  }
-
-  .squat {
-    animation: squat 0.5s steps(5) 1;
-  }
-
-  @keyframes jump {
-    0% { background-position: 0 0; }
-    100% { background-position: -400px 0; }
-  }
-
-  @keyframes squat {
-    0% { background-position: 0 0; }
-    100% { background-position: -400px 0; }
-  }
