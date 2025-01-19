@@ -49,7 +49,6 @@ export default function Webcam() {
     
     async function poseCallback(poseData) {
         poseLandmarks.current = poseData.landmarks;
-        //changePose(poseData)
     }
 
     return (
@@ -58,8 +57,9 @@ export default function Webcam() {
                 <video
                     ref={webcamVideo}
                     autoPlay
-                    width="240px"
-                    height="320px"
+                    width="480px"
+                    height="640px"
+                    onLoadedData={readPose}
                     className={
                         isWebcamOn
                             ? "rounded-tr-lg border-4 border-[#46262d]"
@@ -70,8 +70,8 @@ export default function Webcam() {
                     ref={canvas}
                     className="output_canvas absolute top-0 left-0 w-[240px] h-[320px]"
                     id="output_canvas"
-                    width="240"
-                    height="320"
+                    width="480"
+                    height="640"
                 ></canvas>
             </div>
 
@@ -80,6 +80,4 @@ export default function Webcam() {
             </button>
         </div>
     );
-
-    // save the previous onLoadedData={readSign} ^ above.. for like messages like.. jump higher.. or squat more.. if the person isn't doing it enough..
 }

@@ -9,6 +9,8 @@ export { createPoseLandmarker, hasGetUserMedia, predictWebcam };
 let poseLandmarker;
 let lastVideoTime = -1;
 let runningMode = "IMAGE";
+const videoHeight = "640px";
+const videoWidth = "480px";
 
 async function createPoseLandmarker() {
     const vision = await FilesetResolver.forVisionTasks(
@@ -22,6 +24,7 @@ async function createPoseLandmarker() {
         runningMode: runningMode,
         numPoses: 2,
     });
+
     //demosSection.classList.remove("invisible");
 }
 //createPoseLandmarker();
@@ -32,6 +35,7 @@ const hasGetUserMedia = () => !!navigator.mediaDevices?.getUserMedia;
 // pt. 2 out
 
 async function predictWebcam(video, canvasElement, callback) {
+    console.log("We predicting..");
     const canvasCtx = canvasElement.getContext("2d");
     const drawingUtils = new DrawingUtils(canvasCtx);
 
@@ -56,6 +60,7 @@ async function predictWebcam(video, canvasElement, callback) {
                 canvasElement.height
             );
             for (const landmark of result.landmarks) {
+
                 drawingUtils.drawLandmarks(landmark, {
                     radius: (data) => {
                         if (data.from && typeof data.from.z !== "undefined") {
@@ -76,49 +81,11 @@ async function predictWebcam(video, canvasElement, callback) {
                     PoseLandmarker.POSE_CONNECTIONS
                 );
             }
+            callback(result);
             canvasCtx.restore();
         });
     }
 
     // Call this function again to keep predicting when the browser is ready.
-    if (webcamRunning === true) {
-        window.requestAnimationFrame(predictWebcam);
-    }
+    window.requestAnimationFrame(() => {predictWebcam(video, canvasElement, callback);});
 }
-
-/**
- * pt. 1:
- // actual demo part
-const video = document.getElementById("webcam");
-const canvasElement = document.getElementById("output_canvas");
-const canvasCtx = canvasElement.getContext("2d");
-const drawingUtils = new DrawingUtils(canvasCtx);
-
-* pt. 2:
-// Enable the live webcam view and start detection.
-function enableCam(event) {
-    if (!poseLandmarker) {
-        console.log("Wait! poseLandmaker not loaded yet.");
-        return;
-    }
-
-    if (webcamRunning === true) {
-        webcamRunning = false;
-        enableWebcamButton.innerText = "ENABLE PREDICTIONS";
-    } else {
-        webcamRunning = true;
-        enableWebcamButton.innerText = "DISABLE PREDICTIONS";
-    }
-
-    // getUsermedia parameters.
-    const constraints = {
-        video: true,
-    };
-
-    // Activate the webcam stream.
-    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-        video.srcObject = stream;
-        video.addEventListener("loadeddata", predictWebcam);
-    });
-}
- */
