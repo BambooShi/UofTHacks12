@@ -68,7 +68,7 @@ export default function Webcam() {
                 />
                 <canvas
                     ref={canvas}
-                    className="output_canvas absolute top-0 left-0 w-[240px] h-[320px]"
+                    className="output_canvas absolute top-0 left-[-240px] w-[240px] h-[320px]"
                     id="output_canvas"
                     width="480"
                     height="640"
@@ -78,6 +78,7 @@ export default function Webcam() {
             <button className="rounded-none  w-60 text-xl" onClick={toggleCam}>
                 {isWebcamOn ? "Disable Webcam" : "Enable Webcam"}
             </button>
+            <p>Position camera such that your feet and mid-chest is visible in the camera.</p>
         </div>
     );
 }
