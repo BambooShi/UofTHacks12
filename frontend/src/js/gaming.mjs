@@ -1,4 +1,6 @@
 import DeviceDetector from "https://cdn.skypack.dev/device-detector-js@2.2.10";
+import player1Img from "../assets/player1.png";
+import player2Img from "../assets/player2.png";
 
 // Usage: testSupport({client?: string, os?: string}[])
 // Client and os are regular expressions.
@@ -44,12 +46,12 @@ canvas.height = 720;
 export const canvasCtx = canvas.getContext("2d");
 
 const spriteSheet = new Image();
-spriteSheet.src = "../assets/player1.png";
+spriteSheet.src = player1Img;
 
 console.log(spriteSheet);
 
 const spriteSheet2 = new Image();
-spriteSheet2.src = "../assets/player2.png";
+spriteSheet2.src = player2Img;
 
 let currentFrame = 0; // Current frame index
 const animationSpeed = 1000; // Milliseconds between frame changes
@@ -64,11 +66,11 @@ let bot = { x: 600, y: 370, width: 150, height: 200 };
 
 export function startGame() {
     const spriteSheet = new Image();
-    spriteSheet.src = "../assets/player1.png";
+    spriteSheet.src = player1Img;
     console.log(spriteSheet.src);
 
     const spriteSheet2 = new Image();
-    spriteSheet2.src = "../assets/player2.png";
+    spriteSheet2.src = player2Img;
 
     // Start the loop
     // spriteSheet.onload = spriteSheet2.onload = () => {

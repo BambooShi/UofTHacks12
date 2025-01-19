@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import GInterface from "./GInterface";
 export default function Game() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function Game() {
         const player2Name: string = location.state.player2Name || "player2";
         return (
             <div className="flex flex-col justify-center items-center w-full h-full bg-gray-500">
-                <div className="bg-blue-700 w-10/12 min-h[220px]"></div>
+                <GInterface/>
                 <div className="camera-container"></div>
                 <div className="name-container">
                     <div>{player1Name}</div>
