@@ -1,48 +1,52 @@
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { startGame, canvas } from "../js/gaming.mjs";
+import React, { useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { GameEngine } from './gamelogic.ts';
+import player1Img from '../assets/player1.png';
+import player2Img from '../assets/player2.png';
 
-const motionData = {
-    player1: "jump",
-};
-
-// Convert the object to a string and store it in localStorage
-localStorage.setItem("motionData", JSON.stringify(motionData));
-
-export default function GInterface() {
+const GInterface: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const gameEngineRef = useRef<GameEngine | null>(null);
 
     useEffect(() => {
-        // Check if location state exists before starting the game
         if (!location.state) {
-            navigate("/"); // Navigate to home if state is not found
+            navigate('/');
             return;
         }
 
-        // Append the canvas to the container if it isn't already present
+        localStorage.setItem("motionData", JSON.stringify({ player1: "idle" }));
+        
+        // Test device support
+        GameEngine.testSupport([{ client: "Chrome" }]);
+
+        // Initialize game engine
+        gameEngineRef.current = new GameEngine(player1Img, player2Img);
+        
         const container = document.querySelector(".game-play-container");
-        if (container && !container.contains(canvas)) {
-            container.appendChild(canvas);
+        if (container && !container.contains(GameEngine.canvas)) {
+            container.appendChild(GameEngine.canvas);
         }
 
         // Start the game
-        console.log("Game started");
-        startGame();
+        gameEngineRef.current.start();
 
-        // Cleanup: Remove the canvas on component unmount
+        // Cleanup
         return () => {
-            if (container && container.contains(canvas)) {
-                container.removeChild(canvas);
+            if (gameEngineRef.current) {
+                gameEngineRef.current.stop();
+            }
+            if (container && container.contains(GameEngine.canvas)) {
+                container.removeChild(GameEngine.canvas);
             }
         };
-    }, [location.state, navigate]); // Dependency array
+    }, [location.state, navigate]);
 
     return (
         <div className="game-container">
-            <div className="game-play-container"></div>
+            <div className="game-play-container" />
         </div>
     );
-}
+};
 
-export { GInterface };
+export default GInterface;
