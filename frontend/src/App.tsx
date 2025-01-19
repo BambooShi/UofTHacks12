@@ -6,12 +6,14 @@ import Game from "./components/Game.tsx";
 function App() {
     return (
         <>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Login />} />
-                    <Route path="/play" element={<Game />} />
-                </Routes>
-            </BrowserRouter>
+            <div className="h-screen w-screen">
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Login />} />
+                        <Route path="/play" element={<Game />} />
+                    </Routes>
+                </BrowserRouter>
+            </div>
         </>
     );
 }
