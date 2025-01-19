@@ -85,3 +85,9 @@ button:focus-visible {
 .name-container{
   margin-left: 3%;
 }
+
+/* 
+canvas{
+  visibility: hidden;
+}
+*/
