@@ -22,6 +22,7 @@ export default function Game() {
                     <div>{player2Name}</div>
                 </div>
             </div>
+            
         );
     } else {
         return null;

@@ -7,7 +7,7 @@ const Login: React.FC = () => {
         event.preventDefault();
         const formElement: HTMLFormElement = event.currentTarget;
         const formData = new FormData(formElement);
-        const path: string = "/play";
+        const path: string = "/game";
         const player1Name = formData.get("player1") as string;
         const player2Name = formData.get("player2") as string;
         navigate(path, {
