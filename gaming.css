@@ -1,0 +1,36 @@
+#character {
+    width: 100px;
+    height: 100px;
+    background: url('spritesheet.png') 0 0 / 500% 300%;
+    animation: idle 1s steps(5) infinite;
+  }
+
+  .attack {
+    animation: attack 0.5s steps(5) 1;
+  }
+
+  .dodge {
+    animation: dodge 0.5s steps(5) 1;
+  }
+
+  @keyframes idle {
+    0% { background-position: 0 0; }
+    100% { background-position: -400px 0; }
+  }
+
+  @keyframes jump {
+    0% { background-position: 0 0; }
+    100% { background-position: -400px -100px; }
+  }
+
+  @keyframes squat {
+    0% { background-position: 0 0; }
+    100% { background-position: -400px -200px; }
+  }
+
+  .container {
+    background: url('country_scene.jpg') 0 0 / 100% 68%;
+    aspect-ratio: 4/3;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+  }
