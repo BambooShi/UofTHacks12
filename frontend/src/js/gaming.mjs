@@ -72,8 +72,8 @@ export function startGame() {
 
     // Start the loop
     // spriteSheet.onload = spriteSheet2.onload = () => {
-        console.log("Game actuallly started");
-        requestAnimationFrame(gameLoop);
+    console.log("Game actuallly started");
+    requestAnimationFrame(gameLoop);
     // };
 }
 
@@ -107,20 +107,14 @@ export function gameLoop(timestamp) {
     console.log("lastBotAction: " + lastBotAction);
     console.log("Drawing players...");
 
-    if (
-        motionData.player1 == "jump"  &&
-        lastBotAction != "squat"
-    ) {
+    if (motionData.player1 == "jump" && lastBotAction != "squat") {
         console.log("Player 1 wins!");
         exitgame("Player 1");
-    } else if (
-        lastBotAction == "jump" &&
-        motionData.player1 != "squat"
-    ) {
+    } else if (lastBotAction == "jump" && motionData.player1 != "squat") {
         console.log("Bot wins!");
         exitgame("Bot");
     }
-    
+
     // Continue the loop
     requestAnimationFrame(gameLoop);
 }
@@ -129,9 +123,15 @@ export function exitgame(winner) {
     console.log("Exiting game...");
     localStorage.removeItem("motionData");
     alert("Game Over! " + winner + " wins!\n Press ENTER to play again.");
-    if (event.key === "Enter" || event.keyCode === 13) {
-        location.reload();
-    }
+
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            window.removeEventListener("keydown", handleKeyPress);
+            location.reload();
+        }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
 }
 
 export function drawPlayer1(motionData) {
