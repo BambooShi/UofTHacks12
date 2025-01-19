@@ -111,6 +111,7 @@ async function predictWebcam(video, canvasElement, callback) {
                     //sendMotionData({ player2: "", player1: "squat" }); //temporary hardcoded
                 
                 } 
+                /* 
                  if (isLeftHandUp1 && (currentTime - lastJumpTime1 > jumpCooldown)){
                     // triggerAnimation("jump");
                     console.log(`person ${person} squat`);
@@ -121,6 +122,7 @@ async function predictWebcam(video, canvasElement, callback) {
                     lastJumpTime1 = currentTime; 
                     //sendMotionData({ player2: "", player1: "jump" }); //temporary hardcoded
                 }
+                    */
             }
 
             // another person
@@ -160,6 +162,7 @@ async function predictWebcam(video, canvasElement, callback) {
                     //sendMotionData({ player2: "", player1: "squat" }); //temporary hardcoded
                     lastJumpTime2 = currentTime;
                 } 
+                /* 
                  if (isLeftHandUp2 && (currentTime - lastJumpTime1 > jumpCooldown)){
                     // triggerAnimation("jump");
                     console.log(`person ${person} squat`);
@@ -169,6 +172,7 @@ async function predictWebcam(video, canvasElement, callback) {
                     lastJumpTime2 = currentTime;
                     //sendMotionData({ player2: "", player1: "jump" }); //temporary hardcoded
                 }
+                */
             }
 
             for (const landmark of result.landmarks) {
